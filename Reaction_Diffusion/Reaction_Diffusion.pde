@@ -36,8 +36,10 @@ void generateInitialState() {
     for (int i = 0; i < H; i++) {
       for (int j = 0; j < W; j++) {     
         if (pow(i-H/2, 2) + pow(j-W/2, 2) < 400) {  
-          U[i][j] = 0.5*(1 + random(-1, 1));
-          V[i][j] = 0.25*( 1 + random(-1, 1));
+          if (random(0, 1) > .8) {
+            U[i][j] = random(0, 1);
+            V[i][j] = random(0, 1);
+          }
         }
       }
     }
@@ -45,8 +47,8 @@ void generateInitialState() {
     for (int i = 0; i < H; i++) {
       for (int j = 0; j < W; j++) {     
         if (pow(i-H/2, 2) + pow(j-W/2, 2) < 400) {
-          U[i][j] = 0.5;
-          V[i][j] = 0.25;
+          U[i][j] = 0;
+          V[i][j] = 1;
         }
       }
     }
@@ -66,24 +68,43 @@ void setup() {
   //Set default parameters;
   diffU = 0.16;
   diffV = 0.08;
-  //paramF = 0.0545;
-  //paramK = 0.062;
+  paramF = 0.035;
+  paramK = 0.06;
 
   //sliders
   cp5 = new ControlP5(this);
-  cp5.addSlider("F")
+  
+  cp5.addTextlabel("label1")
+                    .setText("[n] new")
+                    .setPosition(600,10)
+                    .setFont(createFont("Georgia",20))
+                    ;
+  cp5.addTextlabel("label2")
+                    .setText("[r] random")
+                    .setPosition(600,50)
+                    .setFont(createFont("Georgia",20))
+                    ;
+  cp5.addTextlabel("label3")
+                    .setText("[1-8] presets")
+                    .setPosition(800,10)
+                    .setFont(createFont("Georgia",20))
+                    ;
+  
+  cp5.addSlider("Feed")
     .setPosition(10, 10)
-    .setSize(200, 20)
+    .setSize(400, 30)
     .setRange(.01, .1)
-    .setValue(.05)
-    .setDecimalPrecision(5)
+    .setValue((float)paramF)
+    .setDecimalPrecision(4)
+    .setFont(createFont("Ubuntu", 20, true))
     ;
-  cp5.addSlider("K")
-    .setPosition(10, 40)
-    .setSize(200, 20)
+  cp5.addSlider("Kill")
+    .setPosition(10, 50)
+    .setSize(400, 30)
     .setRange(.045, .07)
-    .setValue(.062)
-    .setDecimalPrecision(5)
+    .setValue((float)paramK)
+    .setDecimalPrecision(4)
+    .setFont(createFont("Ubuntu", 20, true))
     ;
 
   rndInitCondition = true;
@@ -179,50 +200,50 @@ void keyPressed() {
   case '1':
     paramF = 0.035;
     paramK = 0.06;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '2':
     paramF = 0.042;
     paramK = 0.065;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '3':
     paramF = 0.025;
     paramK = 0.056;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '4':
     paramF = 0.02;
     paramK = 0.056;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '5':
     paramF = 0.035;
     paramK = 0.065;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '6':
     paramF = 0.062;
     paramK = 0.062;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '7':
     paramF = 0.05;
     paramK = 0.065;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case '8':
     paramF = .0135;
     paramK = 0.047;
-    cp5.getController("F").setValue((float)paramF);
-    cp5.getController("K").setValue((float)paramK);
+    cp5.getController("Feed").setValue((float)paramF);
+    cp5.getController("Kill").setValue((float)paramK);
     break;
   case 'r':
     rndInitCondition = true;
@@ -234,11 +255,9 @@ void keyPressed() {
   }
 }
 
-void F(float sliderF) {
+void Feed(float sliderF) {
   paramF = sliderF;
-  println("a slider event. setting paramF to "+sliderF);
 }
-void K(float sliderK) {
+void Kill(float sliderK) {
   paramK = sliderK;
-  println("a slider event. setting paramK to "+sliderK);
 }
