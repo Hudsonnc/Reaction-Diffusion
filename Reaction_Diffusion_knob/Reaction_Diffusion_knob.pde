@@ -1,6 +1,7 @@
 int H = 480;
 int W = 270;
 PImage img = createImage(H, W, RGB);
+PImage equ;
 
 //sliders
 import controlP5.*;
@@ -78,7 +79,10 @@ void setup() {
   frameRate(30);
   smooth();
   colorMode(HSB, 1.0);
-
+  
+  //equation
+  equ = loadImage("../gray-scott-formula.jpg");
+  equ.filter(INVERT);
 
   //Set default parameters;
   diffU = 0.16;
@@ -227,6 +231,8 @@ void draw() {
   //filter(THRESHOLD);
   //cool contrasty filter
   //filter(POSTERIZE, 4);
+  
+  image(equ, width/2 - 200, height - 160, 400, 150);
 }
 
 
