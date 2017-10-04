@@ -20,7 +20,7 @@ int kRead;
 float kReadScaled;
 float kReadScaledSmoothed;
 //smoothing tau
-float tau = 10;
+float tau = 1;
 
 
 //System parameters
@@ -106,16 +106,16 @@ void setup() {
   //sliders
   cp5 = new ControlP5(this);
   
-  cp5.addTextlabel("label1")
-                    .setText("[n] new")
-                    .setPosition(600,10)
-                    .setFont(createFont("Ubuntu", 20, true))
-                    ;
-  cp5.addTextlabel("label2")
-                    .setText("[r] random")
-                    .setPosition(600,50)
-                    .setFont(createFont("Ubuntu", 20, true))
-                    ;
+  //cp5.addTextlabel("label1")
+  //                  .setText("[n] new")
+  //                  .setPosition(600,10)
+  //                  .setFont(createFont("Ubuntu", 20, true))
+  //                  ;
+  //cp5.addTextlabel("label2")
+  //                  .setText("[r] random")
+  //                  .setPosition(600,50)
+  //                  .setFont(createFont("Ubuntu", 20, true))
+  //                  ;
   
   cp5.addSlider("Feed")
     .setPosition(10, 10)
@@ -157,7 +157,7 @@ void setup() {
   }
 
   vertOffset[0][0] = H-1;
-  horizOffset[0][1] = 1;
+  vertOffset[0][1] = 1;
 
   vertOffset[H-1][0] = H-2;
   vertOffset[H-1][1] = 0;
@@ -211,10 +211,12 @@ void draw() {
   }
 
   img.loadPixels();
+  float sumvals = 0;
   for (int i = 0; i < H; i++) {
     for (int j = 0; j < W; j++) {
 
       float val = (float)(1-U[i][j]);
+      sumvals = sumvals+val;
       //purple
       //img.pixels[i*W + j] = color(0.74, 0.87, val); 
 
@@ -233,6 +235,10 @@ void draw() {
   //filter(POSTERIZE, 4);
   
   image(equ, width/2 - 200, height - 160, 400, 150);
+  if(abs(sumvals) < 10){
+    rndInitCondition = true;
+    generateInitialState();
+  }
 }
 
 
